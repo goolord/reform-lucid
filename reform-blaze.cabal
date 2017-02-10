@@ -22,7 +22,7 @@ Library
                      Text.Reform.Blaze.String
                      Text.Reform.Blaze.Text
 
-  Build-depends:     base         >4 && <5,
+  Build-depends:     base         >4.5 && <5,
                      blaze-markup >= 0.5 && < 0.8,
                      blaze-html   >= 0.5 && < 0.10,
                      reform       == 0.2.*,
