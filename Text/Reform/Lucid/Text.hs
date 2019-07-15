@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, ScopedTypeVariables, TypeFamilies, UndecidableInstances, ViewPatterns #-}
 {- |
-This module provides functions creating Reform using blaze-html markup.
+This module provides functions creating Reform using lucid markup.
 
 This module assumes that you wish for text based controls such as 'inputText' and 'textarea' to using 'Text' values. If you prefer 'String' see "Text.Reform.Blaze.String".
 
