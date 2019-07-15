@@ -135,10 +135,34 @@ label :: (Monad m, ToHtml children, Monad f) =>
          children
       -> Form m input error (HtmlT f ()) () ()
 label c = G.label mkLabel
-    where
-      mkLabel i = label_ [for_ (toPathPiece i)] $ toHtml c
+  where
+  mkLabel i = label_ [for_ (toPathPiece i)] $ toHtml c
 
+arbitraryHtml :: Monad m => view -> Form m input error view () ()
+arbitraryHtml wrap = Form $ do
+    id' <- getFormId
+    return ( View (const $ wrap)
+           , return (Ok $ Proved { proofs   = ()
+                                 , pos      = unitRange id'
+                                 , unProved = ()
+                                 })
+           )
 
+inputInt :: (Monad m, FormError err, Applicative f)
+  => (input -> Either err Int)
+  -> Int
+  -> Form m input err (HtmlT f ()) () Int
+inputInt getInput initialValue = G.input getInput inputField initialValue
+  where
+  inputField i a = input_ [type_ "number", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
+
+inputDouble :: (Monad m, FormError err, Applicative f)
+  => (input -> Either err Double)
+  -> Double
+  -> Form m input err (HtmlT f ()) () Double
+inputDouble getInput initialValue = G.input getInput inputField initialValue
+  where
+  inputField i a = input_ [type_ "number", step_ "any", id_ (toPathPiece i), name_ (toPathPiece i), value_ (T.pack $ show a)]
 
 -- | Create a single @\<input type=\"checkbox\"\>@ element
 --
