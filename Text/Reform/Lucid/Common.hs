@@ -131,12 +131,12 @@ button c = G.inputNoData inputField Nothing
 -- Use this with <++ or ++> to ensure that the @for@ attribute references the correct @id@.
 --
 -- > label "some input field: " ++> inputText ""
-label :: (Monad m, ToHtml children, Monad f) =>
-         children
-      -> Form m input error (HtmlT f ()) () ()
+label :: (Monad m, Monad f) 
+  => HtmlT f ()
+  -> Form m input error (HtmlT f ()) () ()
 label c = G.label mkLabel
   where
-  mkLabel i = label_ [for_ (toPathPiece i)] $ toHtml c
+  mkLabel i = label_ [for_ (toPathPiece i)] c
 
 arbitraryHtml :: Monad m => view -> Form m input error view () ()
 arbitraryHtml wrap = Form $ do
