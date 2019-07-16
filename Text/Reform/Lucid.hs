@@ -153,7 +153,17 @@ inputInt :: (Monad m, FormError err, Applicative f)
   -> Form m input err (HtmlT f ()) () Int
 inputInt getInput initialValue = G.input getInput inputField initialValue
   where
-  inputField i a = input_ [type_ "number", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
+  min = toPathPiece (minBound :: Int)
+  {-# inline min #-}
+  max = toPathPiece (maxBound :: Int)
+  {-# inline max #-}
+  inputField i a = input_ 
+    [ type_ "number", id_ (toPathPiece i)
+    , name_ (toPathPiece i)
+    , value_ (toPathPiece a)
+    , min_ min
+    , max_ max
+    ]
 
 inputDouble :: (Monad m, FormError err, Applicative f)
   => (input -> Either err Double)
