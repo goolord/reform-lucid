@@ -4,7 +4,7 @@
   , TypeFamilies 
 #-}
 
-module Text.Reform.Lucid.Common where
+module Text.Reform.Lucid where
 
 import Data.Monoid (mconcat, mempty, (<>))
 import Lucid
@@ -27,46 +27,46 @@ inputText :: (Monad m, FormError error, PathPiece text, Applicative f) =>
           -> text
           -> Form m input error (HtmlT f ()) () text
 inputText getInput initialValue = G.input getInput inputField initialValue
-    where
-      inputField i a = input_ [type_ "text", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
+  where
+  inputField i a = input_ [type_ "text", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
 
 inputPassword :: (Monad m, FormError error, PathPiece text, Applicative f) =>
              (input -> Either error text)
           -> text
           -> Form m input error (HtmlT f ()) () text
 inputPassword getInput initialValue = G.input getInput inputField initialValue
-    where
-      inputField i a = input_ [type_ "password", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
+  where
+  inputField i a = input_ [type_ "password", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
 
 inputSubmit :: (Monad m, FormError error, PathPiece text, Applicative f) =>
              (input -> Either error text)
           -> text
           -> Form m input error (HtmlT f ()) () (Maybe text)
 inputSubmit getInput initialValue = G.inputMaybe getInput inputField initialValue
-    where
-      inputField i a = input_ [type_ "submit", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
+  where
+  inputField i a = input_ [type_ "submit", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
 
 inputReset :: (Monad m, FormError error, PathPiece text, Applicative f) =>
               text
            -> Form m input error (HtmlT f ()) () ()
 inputReset lbl = G.inputNoData inputField lbl
-    where
-      inputField i a = input_ [type_ "submit", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
+  where
+  inputField i a = input_ [type_ "submit", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
 
 inputHidden :: (Monad m, FormError error, PathPiece text, Applicative f) =>
              (input -> Either error text)
           -> text
           -> Form m input error (HtmlT f ()) () text
 inputHidden getInput initialValue = G.input getInput inputField initialValue
-    where
-      inputField i a = input_ [type_ "hidden", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
+  where
+  inputField i a = input_ [type_ "hidden", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
 
 inputButton :: (Monad m, FormError error, PathPiece text, Applicative f) =>
              text
           -> Form m input error (HtmlT f ()) () ()
 inputButton label = G.inputNoData inputField label
-    where
-      inputField i a = input_ [type_ "button", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
+  where
+  inputField i a = input_ [type_ "button", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)]
 
 
 textarea :: (Monad m, FormError error, ToHtml text, Monad f) =>
@@ -76,14 +76,13 @@ textarea :: (Monad m, FormError error, ToHtml text, Monad f) =>
          -> text   -- ^ initial text
          -> Form m input error (HtmlT f ()) () text
 textarea getInput cols rows initialValue = G.input getInput textareaView initialValue
-    where
-      textareaView i txt =
-          textarea_ [ rows_ (toPathPiece rows)
-                    , cols_ (toPathPiece cols)
-                    , id_   (toPathPiece i)
-                    , name_ (toPathPiece i)
-                    ] $ toHtml txt
-
+  where
+  textareaView i txt = textarea_ 
+    [ rows_ (toPathPiece rows)
+    , cols_ (toPathPiece cols)
+    , id_   (toPathPiece i)
+    , name_ (toPathPiece i)
+    ] $ toHtml txt
 
 -- | Create an @\<input type=\"file\"\>@ element
 --
@@ -91,39 +90,39 @@ textarea getInput cols rows initialValue = G.input getInput textareaView initial
 inputFile :: (Monad m, FormError error, FormInput input, ErrorInputType error ~ input, Applicative f) =>
              Form m input error (HtmlT f ()) () (FileType input)
 inputFile = G.inputFile fileView
-    where
-      fileView i = input_ [type_ "file", id_ (toPathPiece i), name_ (toPathPiece i)]
+  where
+  fileView i = input_ [type_ "file", id_ (toPathPiece i), name_ (toPathPiece i)]
 
 
 -- | Create a @\<button type=\"submit\"\>@ element
 buttonSubmit :: (Monad m, FormError error, PathPiece text, ToHtml children, Monad f) =>
-                (input -> Either error text)
-             -> text
-             -> children
-             -> Form m input error (HtmlT f ()) () (Maybe text)
+     (input -> Either error text)
+  -> text
+  -> children
+  -> Form m input error (HtmlT f ()) () (Maybe text)
 buttonSubmit getInput text c = G.inputMaybe getInput inputField text
-    where
-      inputField i a = button_ [type_ "submit", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)] $ toHtml c
+  where
+  inputField i a = button_ [type_ "submit", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece a)] $ toHtml c
 
 -- | create a  @\<button type=\"reset\"\>\<\/button\>@ element
 --
 -- This element does not add any data to the form data set.
 buttonReset :: (Monad m, FormError error, ToHtml children, Monad f) =>
-               children
-             -> Form m input error (HtmlT f ()) () ()
+     children
+  -> Form m input error (HtmlT f ()) () ()
 buttonReset c = G.inputNoData inputField Nothing
-    where
-      inputField i a = button_ [type_ "reset", id_ (toPathPiece i), name_ (toPathPiece i)] $ toHtml c
+  where
+  inputField i a = button_ [type_ "reset", id_ (toPathPiece i), name_ (toPathPiece i)] $ toHtml c
 
 -- | create a  @\<button type=\"button\"\>\<\/button\>@ element
 --
 -- This element does not add any data to the form data set.
 button :: (Monad m, FormError error, ToHtml children, Monad f) =>
-          children
-       -> Form m input error (HtmlT f ()) () ()
+   children
+  -> Form m input error (HtmlT f ()) () ()
 button c = G.inputNoData inputField Nothing
-    where
-      inputField i a = button_ [type_ "button", id_ (toPathPiece i), name_ (toPathPiece i)] $ toHtml c
+  where
+  inputField i a = button_ [type_ "button", id_ (toPathPiece i), name_ (toPathPiece i)] $ toHtml c
 
 
 -- | create a @\<label\>@ element.
@@ -141,8 +140,8 @@ label c = G.label mkLabel
 arbitraryHtml :: Monad m => view -> Form m input error view () ()
 arbitraryHtml wrap = Form $ do
     id' <- getFormId
-    return ( View (const $ wrap)
-           , return (Ok $ Proved { proofs   = ()
+    pure ( View (const $ wrap)
+           , pure (Ok $ Proved { proofs   = ()
                                  , pos      = unitRange id'
                                  , unProved = ()
                                  })
@@ -189,8 +188,8 @@ inputCheckbox initiallyChecked =
           let checkbox  = input_ $ (if checked then (:) checked_ else id) 
                                    [type_ "checkbox", id_ (toPathPiece i), name_ (toPathPiece i), value_ (toPathPiece i)]
           in
-          return ( View $ const $ checkbox
-                 , return $ Ok (Proved { proofs   = ()
+          pure ( View $ const $ checkbox
+                 , pure $ Ok (Proved { proofs   = ()
                                        , pos      = unitRange i
                                        , unProved = if checked then True else False
                                        })

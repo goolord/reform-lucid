@@ -1,5 +1,5 @@
 Name:                reform-lucid
-Version:             0.0.1.2
+Version:             0.0.2.0
 Synopsis:            Add support for using lucid with Reform
 Description:         Reform is a library for building and validating forms using applicative functors. This package add support for using reform with lucid.
 License:             BSD3
@@ -18,9 +18,7 @@ source-repository head
 
 Library
   exposed-modules: 
-    Text.Reform.Lucid.Common
-    Text.Reform.Lucid.String
-    Text.Reform.Lucid.Text
+    Text.Reform.Lucid
 
   build-depends:
       base >4.5 && <5
