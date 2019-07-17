@@ -7,19 +7,17 @@ module Text.Reform.Lucid where
 import Data.Foldable (traverse_)
 import Data.Monoid ((<>), mconcat, mempty)
 import Data.Text (Text)
-import qualified Data.Text as T
 import Lucid
-import qualified Text.Read
 import Text.Reform.Backend
 import Text.Reform.Core
 import Text.Reform.Generalized as G
 import Text.Reform.Result (FormId, Result (Ok), unitRange)
 import Web.PathPieces
+import qualified Data.Text as T
+import qualified Text.Read
 
 instance PathPiece FormId where
-
   toPathPiece fid = T.pack (show fid)
-
   fromPathPiece fidT = Nothing
 
 inputText
